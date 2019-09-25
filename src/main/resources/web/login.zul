@@ -1,0 +1,23 @@
+<zk>
+    <window id="windowLogin" border="normal" closable="true" mode="modal" width="300px" height="400px"
+            apply="org.ddmed.pump.composer.LoginComposer" title="Login">
+        <hbox align="center" pack="center" hflex="1" vflex="1" >
+            <html:form action="/login" method="POST" xmlns:html="native">
+
+                <vbox  align="center" pack="center" height="70%" width="100%">
+                    <separator ></separator>
+                    <hbox>
+                        <image src="/zkau/web/img/logo_raddico.png" width="200px"/>
+                    </hbox>
+                    <label>PUMP DCM4CHEE V5</label>
+                    <label>(version 1.0.0)</label>
+                    <textbox id="txtUsername" name="username" sclass="textarea" placeholder="Username" />
+                    <textbox id="txtPassword" type="password" name="password" sclass="textarea" placeholder="Password" />
+                    <button type="submit" label="Login" sclass="btn-radius" id="btnSubmit"/>
+                </vbox>
+
+            </html:form>
+        </hbox>
+    </window>
+</zk>
+
