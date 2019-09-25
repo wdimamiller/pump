@@ -1,9 +1,7 @@
 package org.ddmed.pump.service;
 
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import org.ddmed.pump.model.Pump;
+import org.ddmed.pump.domain.Pump;
 
 
 import org.ddmed.pump.model.Study;

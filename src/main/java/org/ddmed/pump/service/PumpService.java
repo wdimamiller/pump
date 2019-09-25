@@ -1,36 +1,38 @@
 package org.ddmed.pump.service;
 
-import org.ddmed.pump.model.Pump;
+import org.ddmed.pump.domain.Pump;
+import org.ddmed.pump.repository.PumpRepository;
 
-import java.util.ArrayList;
+import org.springframework.stereotype.Service;
 import java.util.List;
 
+@Service
 public class PumpService {
 
-    public static List<Pump> getAll(){
 
-        List<Pump> pumps =  new ArrayList<Pump>();
+    private final PumpRepository pumpRepository;
 
-        Pump pump1 = new Pump();
-        pump1.setName("LOCAL PUMP");
-        pump1.setDicomAETitle("DCM4CHEE");
-        pump1.setDicomHostname("127.0.0.1");
-        pump1.setHttpPort("8080");
-        pump1.setWebUri("dcm4chee-arc");
-        pump1.setHttpProtocol("http");
+    public PumpService(PumpRepository pumpRepository) {
+        this.pumpRepository = pumpRepository;
+    }
 
-        pumps.add(pump1);
+    public void createDefaultPump(){
 
-        Pump pump2 = new Pump();
-        pump2.setName("TEST PUMP");
-        pump2.setDicomAETitle("TEST_PUMP");
-        pump2.setDicomHostname("192.168.2.244");
-        pump2.setHttpPort("8080");
-        pump2.setWebUri("dcm4chee-arc");
-        pump2.setHttpProtocol("http");
+        Pump pump = new Pump();
+        pump.setName("LOCAL PUMP");
+        pump.setDicomAETitle("DCM4CHEE");
+        pump.setDicomHostname("127.0.0.1");
+        pump.setHttpPort("8080");
+        pump.setWebUri("dcm4chee-arc");
+        pump.setHttpProtocol("http");
+        pump.setUseByDefault(true);
 
-        pumps.add(pump2);
+        pumpRepository.save(pump);
+    }
 
-        return pumps;
+    public List<Pump> getAll(){
+
+        return (List<Pump>)pumpRepository.findAll();
+
     }
 }

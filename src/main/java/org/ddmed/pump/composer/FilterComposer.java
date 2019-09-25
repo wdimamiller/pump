@@ -1,15 +1,12 @@
 package org.ddmed.pump.composer;
 
-import org.ddmed.pump.config.PumpConfig;
-import org.ddmed.pump.model.Pump;
+import org.ddmed.pump.configuration.PumpConfig;
+import org.ddmed.pump.domain.Pump;
 import org.ddmed.pump.model.Study;
 import org.ddmed.pump.service.PumpRestService;
-import org.ddmed.pump.service.PumpService;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.zkoss.bind.annotation.AfterCompose;
-import org.zkoss.lang.Library;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.select.SelectorComposer;
 import org.zkoss.zk.ui.select.annotation.Listen;
 import org.zkoss.zk.ui.select.annotation.Wire;

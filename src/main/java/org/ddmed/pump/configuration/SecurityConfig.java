@@ -1,4 +1,4 @@
-package org.ddmed.pump.config;
+package org.ddmed.pump.configuration;
 
 import org.ddmed.pump.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

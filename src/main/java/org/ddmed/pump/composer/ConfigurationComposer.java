@@ -1,15 +1,12 @@
 package org.ddmed.pump.composer;
 
-import org.ddmed.pump.PumpApplication;
-import org.ddmed.pump.config.PumpConfig;
-import org.ddmed.pump.model.Pump;
+import org.ddmed.pump.configuration.PumpConfig;
+import org.ddmed.pump.domain.Pump;
 
 import org.ddmed.pump.service.PumpRestService;
 import org.ddmed.pump.service.PumpService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.annotation.Bean;
-import org.springframework.web.client.RestTemplate;
 import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.select.SelectorComposer;
@@ -18,9 +15,9 @@ import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.*;
 
-import javax.annotation.Resource;
+import java.util.List;
 
-
+@org.springframework.stereotype.Component
 public class ConfigurationComposer extends SelectorComposer {
 
     @Wire
@@ -39,8 +36,16 @@ public class ConfigurationComposer extends SelectorComposer {
 
     public void initComponents(){
 
+        List<Pump> bla = pumpService.getAll();
+        if(bla == null){
+            System.out.println("EMPTY");
+        }
+        else{
+            System.out.println(bla.get(0).getName());
+        }
 
-        ListModel<Pump> pumpListModel = new ListModelArray<Pump>(pumpService.getAll());
+
+       /* ListModel<Pump> pumpListModel = new ListModelArray<Pump>(pumpService.getAll());
         listPumps.setModel(pumpListModel);
         listPumps.setItemRenderer((listitem, data, index) -> {
             final Pump pump = (Pump) data;
@@ -56,7 +61,7 @@ public class ConfigurationComposer extends SelectorComposer {
             Listcell cellPort = new Listcell();
             cellPort.appendChild(new Label(pump.getHttpPort()));
             listitem.appendChild(cellPort);
-        });
+        });*/
         //listPumps.setSelectedIndex(0);
 
     }

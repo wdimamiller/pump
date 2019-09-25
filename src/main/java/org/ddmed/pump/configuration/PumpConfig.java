@@ -1,6 +1,6 @@
-package org.ddmed.pump.config;
+package org.ddmed.pump.configuration;
 
-import org.ddmed.pump.model.Pump;
+import org.ddmed.pump.domain.Pump;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
