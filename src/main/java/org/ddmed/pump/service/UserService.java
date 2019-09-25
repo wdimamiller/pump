@@ -36,6 +36,8 @@ public class UserService implements UserDetailsService {
         role.setName("ROLE_ADMIN");
 
         User user = new User();
+        user.setFirstName("Anthony");
+        user.setLastName("Bledin");
         user.setUsername("admin");
         user.setPassword("paris");
         user.setAccountNonExpired(true);

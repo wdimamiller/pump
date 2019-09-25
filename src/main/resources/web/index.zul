@@ -1,0 +1,44 @@
+<zk>
+
+    <toolbar align="end" apply="org.ddmed.pump.composer.UserComposer">
+        <toolbarbutton id="userAccount" label="UNKNOWN" onClick='userMenu.open(self,"after_end")' iconSclass="z-icon-user"/>
+        <separator orient="vertical"></separator>
+    </toolbar>
+
+    <menupopup id="userMenu" >
+        <menuitem label="Logout" href="/logout" />
+        <menuitem label="(v 1.0.0)"></menuitem>
+    </menupopup>
+
+    <separator></separator>
+    <tabbox id="tabmenu" orient="horizontal">
+    <tabs>
+        <tab label="Home"/>
+        <tab label="Configuration"/>
+        <tab label="Users"/>
+        <tab label="Networking"/>
+        <tab label="Marketing"/>
+        <tab label="Faxes"/>
+        <tab label="Directory"/>
+        <tab label="Archive"/>
+        <tab label="Scheduler"/>
+        <tab label="Equipment"/>
+    </tabs>
+    <tabpanels width="100%">
+        <tabpanel>
+            <include mode="defer" src="/zkau/web/zul/tab/home.zul"></include>
+        </tabpanel>
+        <tabpanel>
+            <include mode="defer" src="/zkau/web/zul/tab/config.zul"></include>
+        </tabpanel>
+        <tabpanel>Users</tabpanel>
+        <tabpanel>Networking</tabpanel>
+        <tabpanel>Marketing</tabpanel>
+        <tabpanel>Faxes</tabpanel>
+        <tabpanel>Directory</tabpanel>
+        <tabpanel>Archive</tabpanel>
+        <tabpanel>Scheduler</tabpanel>
+        <tabpanel>Equipment</tabpanel>
+    </tabpanels>
+</tabbox>
+</zk>

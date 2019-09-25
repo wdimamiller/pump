@@ -1,0 +1,16 @@
+<zk>
+    <tabbox id="tabboxLeftConfiguration" orient="left" >
+        <tabs id="tabsLeftConfiguration" hflex="min" align="start">
+            <tab id="tabPump" label="Pump" />
+            <tab id="tabAppeariance" label="Appearance" />
+        </tabs>
+        <tabpanels>
+            <tabpanel>
+                <include mode="defer" src="/zkau/web/zul/tab/pump.zul"></include>
+            </tabpanel>
+            <tabpanel>
+                <include mode="defer" src="/zkau/web/zul/tab/appearance.zul"></include>
+            </tabpanel>
+        </tabpanels>
+    </tabbox>
+</zk>

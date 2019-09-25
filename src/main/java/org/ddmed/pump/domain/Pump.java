@@ -30,10 +30,35 @@ public class Pump {
     @Column(name = "PUMP_DEFAULT")
     private boolean useByDefault;
 
+
     public String getRestBase(){
         return this.httpProtocol +
                 "://" + this.dicomHostname +
                 ":" + this.httpPort +
                 "/" + this.webUri;
+    }
+
+    public Pump(){
+
+    }
+    public Pump(String name, String dicomHostname, String httpPort){
+        this.setName(name);
+        this.setDicomHostname(dicomHostname);
+        this.setHttpPort(httpPort);
+        this.setDicomAETitle("DCM4CHEE");
+        this.setWebUri("dcm4chee-arc");
+        this.setHttpProtocol("http");
+        this.setUseByDefault(false);
+    }
+    public void copy(Pump pump){
+        this.setId(pump.getId());
+        this.setName(pump.getName());
+        this.setDicomHostname(pump.getDicomHostname());
+        this.setDicomAETitle(pump.getDicomAETitle());
+        this.setDicomPort(pump.getDicomPort());
+        this.setUseByDefault(pump.isUseByDefault());
+        this.setWebUri(pump.getWebUri());
+        this.setHttpPort(pump.getHttpPort());
+        this.setHttpProtocol(pump.getHttpProtocol());
     }
 }

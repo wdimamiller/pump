@@ -1,0 +1,15 @@
+<zk>
+<hbox apply="org.ddmed.pump.composer.IndexComposer">
+    <label value="Theme" />
+    <separator></separator>
+    <combobox id="comboTheme">
+        <comboitem label="atlantic" />
+        <comboitem label="breeze" />
+        <comboitem label="sapphire" />
+        <comboitem label="silvertail" />
+        <comboitem label="amelia" />
+        <comboitem label="cyborg" />
+        <comboitem label="iceblue_c" />
+    </combobox>
+</hbox>
+</zk>

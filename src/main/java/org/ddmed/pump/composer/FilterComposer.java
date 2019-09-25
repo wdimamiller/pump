@@ -1,21 +1,19 @@
 package org.ddmed.pump.composer;
 
-import org.ddmed.pump.configuration.PumpConfig;
 import org.ddmed.pump.domain.Pump;
 import org.ddmed.pump.model.Study;
 import org.ddmed.pump.service.PumpRestService;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.select.SelectorComposer;
 import org.zkoss.zk.ui.select.annotation.Listen;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.*;
 
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-
 import java.util.Date;
 import java.util.List;
 
@@ -58,22 +56,32 @@ public class FilterComposer extends SelectorComposer {
 
     private List<Study> studies;
 
+    public void init(){
+        Session session = Executions.getCurrent().getSession();
+        selectedPump = (Pump) session.getAttribute("selectedPump");
+
+
+    }
     public void initComponents(){
 
+        //Patient
         txtPatientID.setValue(null);
         txtPatientName.setValue(null);
         datePatientDOB.setValue(null);
 
+        //Study
         dateStadyFrom.setValue(new Date());
         dateStadyTo.setValue(new Date());
 
         bandFacilities.setText("All facilities");
 
-        AnnotationConfigApplicationContext context =
-                new AnnotationConfigApplicationContext(PumpConfig.class);
+        Session session = Executions.getCurrent().getSession();
+        selectedPump = (Pump) session.getAttribute("selectedPump");
 
-        selectedPump = context.getBean("currentPUMP", Pump.class);
-
+        if(selectedPump == null)
+        {
+            System.out.println("FFFFFUUUUUUCCCCKKKK");
+        }
         //List<String> modalities = PumpRestService.getModalities(selectedPump);
 
         //if(modalities!=null){
@@ -124,6 +132,9 @@ public class FilterComposer extends SelectorComposer {
     @Listen("onClick=#btnSearch")
     public void clickBtnSearch(){
 
+        Session session = Executions.getCurrent().getSession();
+        selectedPump = (Pump) session.getAttribute("selectedPump");
+
         DateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd");
         String dateFrom = dateFormat.format(dateStadyFrom.getValue());
         String dateTo = dateFormat.format(dateStadyTo.getValue());
@@ -135,7 +146,9 @@ public class FilterComposer extends SelectorComposer {
     @AfterCompose
     public void doAfterCompose (Component comp) throws Exception {
         super.doAfterCompose(comp);
+        init();
         initComponents();
+
     }
 
 }

@@ -1,0 +1,41 @@
+<zk>
+    <vbox apply="org.ddmed.pump.composer.PumpComposer">
+        <label>PUMPS LIST</label>
+            <listbox id="listPumps" checkmark="false" multiple="false" >
+                <listhead>
+                    <listheader>Name</listheader>
+                    <listheader>Host</listheader>
+                    <listheader>HTTP Port</listheader>
+                </listhead>
+            </listbox>
+            <hbox>
+                <button id="btnAddPump">New Pump</button>
+            </hbox>
+           <!--<hbox>
+                <button id="btnChoose">Choose</button>
+                <button id="btnVerify">Verify</button>
+           </hbox>-->
+
+        <hbox>
+            <window id="addPumpWindow" closable="true" title="New Pump" border="normal" visible="false">
+                <hbox>
+                    <vbox>
+                        <label>Pump Name</label>
+                        <textbox id="txtNewPumpName" constraint="no empty"></textbox>
+                    </vbox>
+                    <vbox>
+                        <label>Pump Hostname</label>
+                        <textbox id="txtNewPumpHostname" constraint="no empty"></textbox>
+                    </vbox>
+                    <vbox>
+                        <label>Pump HTTP Port</label>
+                        <textbox id="txtNewPumpHttpPort" constraint="no empty"></textbox>
+                    </vbox>
+                </hbox>
+                <separator></separator>
+                <button id="btnSavePump">Save</button>
+            </window>
+        </hbox>
+    </vbox>
+
+</zk>

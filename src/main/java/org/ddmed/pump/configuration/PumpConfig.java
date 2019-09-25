@@ -10,13 +10,14 @@ import org.springframework.context.annotation.Scope;
 public class PumpConfig {
     @Bean("currentPUMP")
     @Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
+
     public Pump selectedPump(){
 
         Pump pump = new Pump();
         pump.setName("TEST PUMP");
         pump.setDicomAETitle("TEST_PUMP");
-        pump.setDicomHostname("192.168.2.244");
-        pump.setHttpPort("8080");
+        pump.setDicomHostname("");
+        pump.setHttpPort("");
         pump.setWebUri("dcm4chee-arc");
         pump.setHttpProtocol("http");
         return pump;

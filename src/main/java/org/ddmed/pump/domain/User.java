@@ -32,6 +32,11 @@ public class User implements UserDetails {
     private boolean credentialsNonExpired;
     @Column(name = "ENABLED")
     private boolean enabled;
+    @Column(name = "FIRST_NAME")
+    private String firstName;
+    @Column(name = "LAST_NAME")
+    private String lastName;
+
 
     @ManyToMany(cascade = CascadeType.ALL)
     @LazyCollection(LazyCollectionOption.FALSE)

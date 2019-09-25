@@ -1,0 +1,141 @@
+<zk>
+    <div  apply="org.ddmed.pump.composer.FilterComposer">
+
+        <groupbox>
+
+            <hbox align="center" pack="center" hflex="1" vflex="1">
+                <vbox align="center" pack="center" width="100%">
+                    <textbox id="txtPatientID" name="" sclass="textarea" placeholder="Patient ID" hflex="1"/>
+                    <textbox id="txtPatientName" name="" sclass="textarea" placeholder="Patient Name" hflex="1"/>
+                    <datebox id="datePatientDOB" placeholder="Patient DOB" hflex="1"></datebox>
+                </vbox>
+
+                <separator orient="vertical"></separator>
+                <separator orient="vertical"></separator>
+                <separator orient="vertical"></separator>
+
+                <vbox>
+                    <label>Facilities</label>
+                    <bandbox id="bandFacilities" hflex="1">
+                        <bandpopup width="15em">
+                            <listbox id="listFacilities" checkmark="true" multiple="true" >
+                                <listhead>
+                                    <listheader label="All facilities" />
+                                </listhead>
+
+                                <listitem label="BOI"/>
+                                <listitem label="SUNSET"/>
+                                <listitem label="WOO"/>
+                            </listbox>
+                        </bandpopup>
+                    </bandbox>
+                </vbox>
+
+                <separator orient="vertical"></separator>
+                <separator orient="vertical"></separator>
+                <separator orient="vertical"></separator>
+
+                <vbox>
+                    <hbox align="start">
+                        <combobox id="listTypeDate" hflex="1">
+                            <comboitem label="Date of Examination"/>
+                            <comboitem label="Date of Modification"/>
+                            <comboitem label="Date of Arrival"/>
+                            <comboitem label="Date of Dictation"/>
+                            <comboitem label="Date of Transcription"/>
+                        </combobox>
+                    </hbox>
+                    <hbox>
+                        <vbox align="start"  vflex="1">
+                            <hbox align="center" hflex="1" vflex="1"><label>Date From</label></hbox>
+                            <hbox align="center" hflex="1" vflex="1"><label>Date To  </label></hbox>
+                        </vbox>
+                        <vbox align="start"  vflex="1">
+                            <datebox id="dateStadyFrom"/>
+                            <datebox id="dateStadyTo" />
+                        </vbox>
+                    </hbox>
+                </vbox>
+
+                <separator orient="vertical"></separator>
+                <separator orient="vertical"></separator>
+                <separator orient="vertical"></separator>
+
+                <vbox>
+                    <label>Modalities</label>
+                    <bandbox id="bandModalities" hflex="1">
+                        <bandpopup width="15em">
+                            <listbox id="listModalities" checkmark="true" multiple="true" >
+                                <listhead>
+                                    <listheader label="All modalities" />
+                                </listhead>
+                                <listitem label="MR"/>
+                                <listitem label="CT"/>
+                                <listitem label="DX"/>
+                                <listitem label="SC"/>
+                            </listbox>
+                        </bandpopup>
+                    </bandbox>
+                    <label>Statuses</label>
+                    <bandbox id="bandStatuses" hflex="1">
+                        <bandpopup width="15em">
+                            <listbox id="listStatuses" checkmark="true" multiple="true" >
+                                <listhead>
+                                    <listheader label="All Statuses"/>
+                                </listhead>
+                                <listitem label="UNREAD"/>
+                                <listitem label="TRANSCRIBED"/>
+                                <listitem label="COMPARISON"/>
+                                <listitem label="PHUNTOM"/>
+                                <listitem label="DICTATED"/>
+                                <listitem label="REVIEWED"/>
+                                <listitem label="DISREGARD"/>
+                                <listitem label="LIEN SIGNED"/>
+                            </listbox>
+                        </bandpopup>
+                    </bandbox>
+
+                </vbox>
+
+                <separator orient="vertical"></separator>
+                <separator orient="vertical"></separator>
+                <separator orient="vertical"></separator>
+
+                <vbox>
+                    <button id="btnSearch" hflex="1">Search</button>
+                    <button id="btnClearFilter" hflex="1">Clear Filters</button>
+                </vbox>
+
+            </hbox>
+
+        </groupbox>
+
+
+
+        <separator></separator>
+        <separator></separator>
+        <separator></separator>
+        <div id="listPatientContent" width="100%" align="center">
+            <div id="gridP" width="90%"   >
+
+                <grid id="gridStudies"  mold="paging" pageSize="10" >
+                    <auxhead>
+                        <auxheader colspan="8">Studies</auxheader>
+                    </auxhead>
+                    <columns>
+                        <column label="Patient Name"  />
+                        <column label="PatientDOB"  />
+                        <column label="PatientID" />
+                        <column label="Gender" align="center" />
+                        <column label="Institution Name" align="center" />
+                        <column label="Modality" align="center" />
+                        <column label="Study Date" align="center"/>
+                        <column label="Series" align="center" />
+                    </columns>
+                </grid>
+
+            </div>
+        </div>
+
+    </div>
+</zk>

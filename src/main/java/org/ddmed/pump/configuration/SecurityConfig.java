@@ -24,16 +24,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        // zk specific -- maybe disable CSRF set by default via auto-configuration? --
-        http.csrf().disable() // can be disabled safely; ZK unique desktop ID generation prevents Cross-Site Request Forgery attacks
-
-                // application specific
+        http.csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/zkau/web/**/js/**","/zkau/web/**/zul/css/**","/zkau/web/**/img/**").permitAll()
-
                 .mvcMatchers("/login","/logout").permitAll()
                 .mvcMatchers("/*").hasRole("ADMIN")
-                .antMatchers("/zkau/web/**/**.zul").denyAll() // calling a zul-page directly is not allowed -- should we put this in the auto-configuration to? --
+                //.antMatchers("/zkau/web/**/**.zul").denyAll() // calling a zul-page directly is not allowed -- should we put this in the auto-configuration to? --
 
                 .and()
                 .formLogin().loginPage("/login").defaultSuccessUrl("/")

@@ -6,46 +6,40 @@ import org.ddmed.pump.domain.Pump;
 import org.ddmed.pump.service.PumpRestService;
 import org.ddmed.pump.service.PumpService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.stereotype.Controller;
 import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.select.SelectorComposer;
 import org.zkoss.zk.ui.select.annotation.Listen;
+import org.zkoss.zk.ui.select.annotation.VariableResolver;
 import org.zkoss.zk.ui.select.annotation.Wire;
+import org.zkoss.zk.ui.select.annotation.WireVariable;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.*;
 
 import java.util.List;
 
-@org.springframework.stereotype.Component
+@VariableResolver(org.zkoss.zkplus.spring.DelegatingVariableResolver.class)
 public class ConfigurationComposer extends SelectorComposer {
 
     @Wire
-    Listbox listPumps;
+    private Listbox listPumps;
     @Wire
-    Bandbox bandPumps;
-
+    private Bandbox bandPumps;
     @Wire
-    Button btnVerify;
+    private Button btnVerify;
 
-    Pump selectedPump ;
+    @WireVariable
+    private PumpService pumpService;
 
-    @Autowired
-    PumpService pumpService;
-
+    private Pump selectedPump;
 
     public void initComponents(){
 
-        List<Pump> bla = pumpService.getAll();
-        if(bla == null){
-            System.out.println("EMPTY");
-        }
-        else{
-            System.out.println(bla.get(0).getName());
-        }
 
-
-       /* ListModel<Pump> pumpListModel = new ListModelArray<Pump>(pumpService.getAll());
+        ListModel<Pump> pumpListModel = new ListModelArray<Pump>(pumpService.getAll());
         listPumps.setModel(pumpListModel);
         listPumps.setItemRenderer((listitem, data, index) -> {
             final Pump pump = (Pump) data;
@@ -61,26 +55,28 @@ public class ConfigurationComposer extends SelectorComposer {
             Listcell cellPort = new Listcell();
             cellPort.appendChild(new Label(pump.getHttpPort()));
             listitem.appendChild(cellPort);
-        });*/
-        //listPumps.setSelectedIndex(0);
+        });
+
 
     }
 
     private void init(){
-        AnnotationConfigApplicationContext context =
-                new AnnotationConfigApplicationContext(PumpConfig.class);
 
-        selectedPump = context.getBean("currentPUMP", Pump.class);
 
-       // selectedPump =(Pump) listPumps.getListModel().getElementAt(listPumps.getSelectedIndex());
-        bandPumps.setText(selectedPump.getName());
+
+        //globalPump =(Pump) listPumps.getListModel().getElementAt(listPumps.getSelectedIndex());
+        //bandPumps.setText(selectedPump.getName());
     }
+
+
+
     @Listen("onSelect=#listPumps")
     public void fillBand(){
 
         selectedPump =(Pump) listPumps.getListModel().getElementAt(listPumps.getSelectedIndex());
 
-        bandPumps.setText( selectedPump.getName());
+
+      //  bandPumps.setText( selectedPump.getName());
     }
 
     @Listen("onClick=#btnVerify")

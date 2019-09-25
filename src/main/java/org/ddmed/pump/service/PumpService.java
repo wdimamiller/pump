@@ -3,12 +3,15 @@ package org.ddmed.pump.service;
 import org.ddmed.pump.domain.Pump;
 import org.ddmed.pump.repository.PumpRepository;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
+@Configurable
 public class PumpService {
-
 
     private final PumpRepository pumpRepository;
 
@@ -34,5 +37,9 @@ public class PumpService {
 
         return (List<Pump>)pumpRepository.findAll();
 
+    }
+
+    public void add(Pump pump){
+        pumpRepository.save(pump);
     }
 }
