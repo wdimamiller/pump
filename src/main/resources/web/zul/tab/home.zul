@@ -23,9 +23,9 @@
                                     <listheader label="All facilities" />
                                 </listhead>
 
-                                <listitem label="BOI"/>
+                                <!--<listitem label="BOI"/>
                                 <listitem label="SUNSET"/>
-                                <listitem label="WOO"/>
+                                <listitem label="WOO"/>-->
                             </listbox>
                         </bandpopup>
                     </bandbox>
@@ -69,10 +69,10 @@
                                 <listhead>
                                     <listheader label="All modalities" />
                                 </listhead>
-                                <listitem label="MR"/>
+                                <!--<listitem label="MR"/>
                                 <listitem label="CT"/>
                                 <listitem label="DX"/>
-                                <listitem label="SC"/>
+                                <listitem label="SC"/>-->
                             </listbox>
                         </bandpopup>
                     </bandbox>

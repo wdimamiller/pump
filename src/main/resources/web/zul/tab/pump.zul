@@ -11,31 +11,36 @@
             <hbox>
                 <button id="btnAddPump">New Pump</button>
             </hbox>
-           <!--<hbox>
-                <button id="btnChoose">Choose</button>
-                <button id="btnVerify">Verify</button>
-           </hbox>-->
 
-        <hbox>
-            <window id="addPumpWindow" closable="true" title="New Pump" border="normal" visible="false">
-                <hbox>
+        <vbox id="addPumpWindow" visible="false">
+           <!-- <window id="addPumpWindow" closable="true" title="New Pump" border="normal" visible="false">-->
+                <hbox hflex="1">
                     <vbox>
                         <label>Pump Name</label>
                         <textbox id="txtNewPumpName" constraint="no empty"></textbox>
                     </vbox>
                     <vbox>
                         <label>Pump Hostname</label>
-                        <textbox id="txtNewPumpHostname" constraint="no empty"></textbox>
+                        <textbox id="txtNewPumpHostname" constraint="no empty" ></textbox>
+                    </vbox>
+                    <vbox>
+                        <label>AETitle</label>
+                        <textbox id="txtNewAETitle" constraint="no empty"></textbox>
                     </vbox>
                     <vbox>
                         <label>Pump HTTP Port</label>
                         <textbox id="txtNewPumpHttpPort" constraint="no empty"></textbox>
                     </vbox>
+
+
                 </hbox>
                 <separator></separator>
-                <button id="btnSavePump">Save</button>
-            </window>
-        </hbox>
+                <hbox hflex="1">
+                    <button id="btnSavePump">Save</button>
+                    <button id="btnVerify">Verify</button>
+                </hbox>
+                    <!--    </window>-->
+        </vbox>
     </vbox>
 
 </zk>

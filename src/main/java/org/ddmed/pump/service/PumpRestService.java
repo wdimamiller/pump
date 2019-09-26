@@ -40,14 +40,27 @@ public  class PumpRestService {
         return modalities;
 
     }
-    public static List<Study> getAllStudies(Pump pump, String dateFrom, String dateTo){
+    public static List<Study> getAllStudies(Pump pump, String dateFrom, String dateTo, String searchName, String searchDOB, String searchPatientID, List<String> searchModalities){
 
+        String  modalitiesInStudy = "";
+        if(searchModalities!=null){
+            for (String mod: searchModalities) {
+                modalitiesInStudy = modalitiesInStudy + "," + mod;
+            }
+        }
         List<Study> studies = new ArrayList<Study>();
+
 
         String uri = pump.getRestBase() +
                 "/aets/" + pump.getDicomAETitle() +
-                "/rs/studies?StudyDate=" + dateFrom + "-" + dateTo;
+                "/rs/studies?" +
+                "StudyDate=" + dateFrom + "-" + dateTo +
+                "&PatientID=" + searchPatientID +
+                "&PatientName=" + searchName + "*" +
+                "&ModalitiesInStudy=" + modalitiesInStudy +
+                "&PatientBirthDate=" + searchDOB;
 
+        System.out.println(uri);
         String result = restTemplate.getForObject(uri, String.class);
         if(result==null){
             return studies;

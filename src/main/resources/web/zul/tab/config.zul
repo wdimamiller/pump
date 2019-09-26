@@ -5,10 +5,10 @@
             <tab id="tabAppeariance" label="Appearance" />
         </tabs>
         <tabpanels>
-            <tabpanel>
+            <tabpanel height="700px">
                 <include mode="defer" src="/zkau/web/zul/tab/pump.zul"></include>
             </tabpanel>
-            <tabpanel>
+            <tabpanel height="700px">
                 <include mode="defer" src="/zkau/web/zul/tab/appearance.zul"></include>
             </tabpanel>
         </tabpanels>

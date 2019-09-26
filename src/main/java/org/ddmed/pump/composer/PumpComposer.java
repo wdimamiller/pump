@@ -36,7 +36,7 @@ public class PumpComposer extends SelectorComposer {
     private Button btnAddPump;
 
     @Wire
-    private Window addPumpWindow;
+    private Vbox addPumpWindow;
 
     @Wire
     private Textbox txtNewPumpName;
@@ -46,6 +46,8 @@ public class PumpComposer extends SelectorComposer {
 
     @Wire
     private Textbox txtNewPumpHttpPort;
+    @Wire
+    private Textbox txtNewAETitle;
 
     @Wire
     private Button btnSavePump;
@@ -63,8 +65,7 @@ public class PumpComposer extends SelectorComposer {
         init();
     }
 
-    private void initComponents(){
-
+    private void fillListPump(){
         ListModel<Pump> pumpListModel = new ListModelArray<Pump>(pumpService.getAll());
         listPumps.setModel(pumpListModel);
         listPumps.setItemRenderer((listitem, data, index) -> {
@@ -82,6 +83,10 @@ public class PumpComposer extends SelectorComposer {
             cellPort.appendChild(new Label(pump.getHttpPort()));
             listitem.appendChild(cellPort);
         });
+    }
+    private void initComponents(){
+
+        fillListPump();
     }
     private void init(){
 
@@ -107,37 +112,39 @@ public class PumpComposer extends SelectorComposer {
     @Listen("onClick=#btnSavePump")
     public void savePump(){
 
-        if((txtNewPumpHostname.getValue().equals(new String("")))
+       /* if((txtNewPumpHostname.getValue().equals(new String("")))
             || (txtNewPumpHttpPort.getValue().equals(new String("")))
             || (txtNewPumpName.getValue().equals(new String(""))) ){
             Clients.showNotification("Please input all fields",
                     Clients.NOTIFICATION_TYPE_ERROR,
                     btnVerify, "end_center", 100);
         }
-        else{
-            Pump pump = new Pump(txtNewPumpName.getValue(), txtNewPumpHostname.getValue(), txtNewPumpHttpPort.getValue());
+        else{*/
+            Pump pump = new Pump(txtNewPumpName.getValue(), txtNewPumpHostname.getValue(), txtNewPumpHttpPort.getValue(), txtNewAETitle.getValue());
             pumpService.add(pump);
-        }
+            fillListPump();
+            Clients.showNotification("Saved!",
+                Clients.NOTIFICATION_TYPE_INFO,
+                btnSavePump, "end_center", 100);
+       // }
 
         txtNewPumpHttpPort.setValue(null);
         txtNewPumpHostname.setValue(null);
         txtNewPumpName.setValue(null);
+        txtNewAETitle.setValue(null);
         addPumpWindow.setVisible(false);
     }
 
     @Listen("onClick=#btnAddPump")
     public void addPump(){
-
-        addPumpWindow.setMode(Window.Mode.MODAL);
         addPumpWindow.setVisible(true);
-
-
     }
 
     @Listen("onClick=#btnVerify")
     public void verifyPump(){
 
-        if(PumpRestService.isWorked(selectedPump)){
+        Pump pump = new Pump(txtNewPumpName.getValue(), txtNewPumpHostname.getValue(), txtNewPumpHttpPort.getValue(), txtNewAETitle.getValue());
+        if(PumpRestService.isWorked(pump)){
             Clients.showNotification("Server running, connection verified",
                     Clients.NOTIFICATION_TYPE_INFO,
                     btnVerify, "end_center", 1000);
