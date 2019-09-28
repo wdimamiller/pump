@@ -29,6 +29,7 @@ public class PumpService {
         pump.setWebUri("dcm4chee-arc");
         pump.setHttpProtocol("http");
         pump.setUseByDefault(true);
+        pump.setDicomPort("11112");
 
         pumpRepository.save(pump);
     }
@@ -39,6 +40,12 @@ public class PumpService {
 
     }
 
+    public Pump getDefault(){
+          return pumpRepository.findByUseByDefault(true);
+    }
+    public void save(Pump pump){
+        pumpRepository.save(pump);
+    }
     public void add(Pump pump){
         pumpRepository.save(pump);
     }

@@ -11,7 +11,7 @@
     </menupopup>
 
     <separator></separator>
-    <tabbox id="tabmenu" orient="horizontal" apply="org.ddmed.pump.composer.MainTabComposer">
+    <tabbox id="tabmenu" orient="horizontal">
     <tabs>
         <tab id="tabHome" label="Home"/>
         <tab label="Configuration"/>
@@ -24,17 +24,18 @@
         <tab label="Scheduler"/>
         <tab label="Equipment"/>
     </tabs>
-        <toolbar align="end">
-            <label>PUMP</label>
-            <bandbox id="bandCurrentPump" hflex="1" autodrop="true">
-                <bandpopup width="15em">
-                    <listbox id="listCurrentPump" >
-                    </listbox>
-                </bandpopup>
-            </bandbox>
+        <toolbar align="end" apply="org.ddmed.pump.composer.MainTabComposer">
+            <hbox align="center" hflex="1" vflex="1">
+                <vbox align="start"  pack="center" hflex="1" vflex="1">
+                    <label>PUMP</label>
+                </vbox>
+                <vbox>
+                    <textbox id="txtCurrentPump" readonly="true"></textbox>
+                </vbox>
+            </hbox>
         </toolbar>
-    <tabpanels width="100%">
-        <tabpanel>
+    <tabpanels>
+        <tabpanel width="100%">
             <include mode="defer" src="/zkau/web/zul/tab/home.zul"></include>
         </tabpanel>
         <tabpanel>

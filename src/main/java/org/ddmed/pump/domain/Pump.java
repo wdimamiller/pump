@@ -41,11 +41,12 @@ public class Pump {
     public Pump(){
 
     }
-    public Pump(String name, String dicomHostname, String httpPort, String AETitle){
+    public Pump(String name, String dicomHostname, String httpPort, String AETitle, String dicomPort){
         this.setName(name);
         this.setDicomHostname(dicomHostname);
         this.setHttpPort(httpPort);
         this.setDicomAETitle(AETitle);
+        this.setDicomPort(dicomPort);
         this.setWebUri("dcm4chee-arc");
         this.setHttpProtocol("http");
         this.setUseByDefault(false);

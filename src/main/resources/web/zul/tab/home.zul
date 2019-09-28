@@ -120,7 +120,7 @@
 
                 <grid id="gridStudies"  mold="paging" pageSize="10" >
                     <auxhead>
-                        <auxheader colspan="8">Studies</auxheader>
+                        <auxheader id="auxHeader" colspan="8" label="Studies"></auxheader>
                     </auxhead>
                     <columns>
                         <column label="Patient Name"  />

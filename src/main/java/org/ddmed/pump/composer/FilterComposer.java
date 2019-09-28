@@ -1,11 +1,11 @@
 package org.ddmed.pump.composer;
 
-
 import org.ddmed.pump.domain.Pump;
 import org.ddmed.pump.model.Study;
 import org.ddmed.pump.service.PumpRestService;
-import org.springframework.web.client.HttpStatusCodeException;
-import org.springframework.web.client.RestTemplate;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
@@ -16,7 +16,6 @@ import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.*;
 
-import javax.xml.crypto.Data;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -27,76 +26,49 @@ import java.util.Set;
 
 public class FilterComposer extends SelectorComposer {
 
-    @Wire
-    Textbox txtPatientID;
-    @Wire
-    Textbox txtPatientName;
-    @Wire
-    Datebox datePatientDOB;
-    @Wire
-    Bandbox bandFacilities;
-    @Wire
-    Bandbox bandStatuses;
-    @Wire
-    Listbox listFacilities;
-    @Wire
-    Bandbox bandModalities;
-    @Wire
-    Listbox listModalities;
-    @Wire
-    Listbox listStatuses;
-    @Wire
-    Combobox listTypeDate;
-    @Wire
-    Datebox dateStadyFrom;
-    @Wire
-    Datebox dateStadyTo;
-    @Wire
-    Button btnSearch;
-    @Wire
-    Button btnClearFilter;
-    @Wire
-    Grid gridStudies;
+    private static final Logger log = LoggerFactory.getLogger(FilterComposer.class);
 
-    Pump selectedPump;
+    @Wire
+    private Textbox txtPatientID;
+    @Wire
+    private Textbox txtPatientName;
+    @Wire
+    private Datebox datePatientDOB;
+    @Wire
+    private Bandbox bandFacilities;
+    @Wire
+    private Bandbox bandStatuses;
+    @Wire
+    private Listbox listFacilities;
+    @Wire
+    private Bandbox bandModalities;
+    @Wire
+    private Listbox listModalities;
+    @Wire
+    private Listbox listStatuses;
+    @Wire
+    private Combobox listTypeDate;
+    @Wire
+    private Datebox dateStadyFrom;
+    @Wire
+    private Datebox dateStadyTo;
+    @Wire
+    private Button btnSearch;
+    @Wire
+    private Button btnClearFilter;
+    @Wire
+    private Auxheader auxHeader;
+    @Wire
+    private Grid gridStudies;
+
+    private Pump selectedPump;
 
     private List<Study> studies;
 
-    public boolean checkServer(){
-        Session session = Executions.getCurrent().getSession();
-        selectedPump = (Pump) session.getAttribute("selectedPump");
-
-        if(selectedPump == null){
-            System.out.println("IT IS NULL");
-            return false;
-        }
-        else{
-
-            RestTemplate restTemplate = new RestTemplate();
-            String uri = selectedPump.getRestBase() + "/ctrl/status";
-            System.out.println(uri);
-            String result;
-            try {
-                String httpResult = restTemplate.getForObject(uri,
-                        String.class);
-                System.out.println(httpResult);
-            } catch (HttpStatusCodeException e) {
-                System.out.println("HTTP ERROR");
-                return false;
-            } catch (RuntimeException e) {
-                System.out.println("RUNTIME ERROR");
-                return false;
-            }
-
-        }
-        return true;
-    }
-
     public void fillFilterComponents(){
-        if(!checkServer()){
+        if(!PumpRestService.isWorked(selectedPump)){
             return;
         }
-
         //Modalities
         List<String>  modalities = PumpRestService.getModalities(selectedPump);
         if(modalities!=null) {
@@ -108,11 +80,16 @@ public class FilterComposer extends SelectorComposer {
     }
     public void init(){
 
+        Session session = Executions.getCurrent().getSession();
+        selectedPump = (Pump) session.getAttribute("selectedPump");
+
         clearFilters();
         fillFilterComponents();
     }
 
+
     public void clearFilters(){
+
 
         txtPatientID.setValue(null);
         txtPatientName.setValue(null);
@@ -139,9 +116,11 @@ public class FilterComposer extends SelectorComposer {
 
     private void fillStudyGrid(){
 
+
         ListModelList<Study> gridListModel = new ListModelList<>(studies);
         gridStudies.setModel(gridListModel);
 
+        auxHeader.setLabel("Studies    find : " + studies.size() );
         gridStudies.setRowRenderer((RowRenderer) (row, data, index) -> {
 
             final Study study = (Study) data;
@@ -163,12 +142,12 @@ public class FilterComposer extends SelectorComposer {
     @Listen("onClick=#btnSearch")
     public void clickBtnSearch(){
 
-        if(!checkServer()){
+        if(!PumpRestService.isWorked(selectedPump)){
             Clients.showNotification("Cant connect to server, " +
                             "check is DCM4CHEE is running or " +
                             "if creadentials are correct",
                     Clients.NOTIFICATION_TYPE_ERROR,
-                    btnSearch, "end_center", 100);
+                    btnSearch, "end_center", 2000);
         }
         else{
             DateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd");
@@ -196,8 +175,6 @@ public class FilterComposer extends SelectorComposer {
 
             }
 
-
-
             studies = PumpRestService.getAllStudies(selectedPump, dateFrom, dateTo, patientName, strPAtientDOB, patientID, modalities);
             fillStudyGrid();
         }
@@ -206,15 +183,15 @@ public class FilterComposer extends SelectorComposer {
 
     @Listen("onClick=#btnClearFilter")
     public void clickBtnClearFilter(){
-
         clearFilters();
-
     }
 
     @AfterCompose
     public void doAfterCompose (Component comp) throws Exception {
         super.doAfterCompose(comp);
         init();
+        Session session = Executions.getCurrent().getSession();
+        session.setAttribute("homeTab", this);
     }
 
 }

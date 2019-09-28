@@ -7,11 +7,12 @@ import org.ddmed.pump.domain.Pump;
 import org.ddmed.pump.model.Study;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.springframework.http.*;
+
 
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 
+import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.Socket;
@@ -60,7 +61,6 @@ public  class PumpRestService {
                 "&ModalitiesInStudy=" + modalitiesInStudy +
                 "&PatientBirthDate=" + searchDOB;
 
-        System.out.println(uri);
         String result = restTemplate.getForObject(uri, String.class);
         if(result==null){
             return studies;
@@ -202,23 +202,36 @@ public  class PumpRestService {
                 "/ctrl/status";
 
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
+        if(pump == null){
+            System.out.println("IT IS NULL");
+            return false;
+        }
+        else {
 
-        HttpEntity<Object> entity = new HttpEntity<Object>(headers);
-
-        ((SimpleClientHttpRequestFactory)restTemplate.getRequestFactory()).setConnectTimeout(2000);
-            ResponseEntity<String> response = restTemplate.exchange(uri, HttpMethod.GET,entity, String.class );
-            HttpStatus statusCode = response.getStatusCode();
+            RestTemplate restTemplate = new RestTemplate();
 
 
-            if(statusCode.value()== 200){
-                return true;
-            }
-            else{
+            restTemplate.setRequestFactory(new SimpleClientHttpRequestFactory());
+            SimpleClientHttpRequestFactory rf = (SimpleClientHttpRequestFactory) restTemplate
+                    .getRequestFactory();
+            rf.setReadTimeout(2000);
+            rf.setConnectTimeout(2000);
+
+            System.out.println(uri);
+            String result;
+            try {
+                String httpResult = restTemplate.getForObject(uri,
+                        String.class);
+                System.out.println(httpResult);
+            } catch (HttpStatusCodeException e) {
+                System.out.println("HTTP ERROR");
+                return false;
+            } catch (RuntimeException e) {
+                System.out.println("RUNTIME ERROR");
                 return false;
             }
         }
-
+        return true;
+    }
 
 }

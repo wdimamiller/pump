@@ -1,46 +1,96 @@
 <zk>
-    <vbox apply="org.ddmed.pump.composer.PumpComposer">
-        <label>PUMPS LIST</label>
-            <listbox id="listPumps" checkmark="false" multiple="false" >
-                <listhead>
-                    <listheader>Name</listheader>
-                    <listheader>Host</listheader>
-                    <listheader>HTTP Port</listheader>
-                </listhead>
-            </listbox>
-            <hbox>
-                <button id="btnAddPump">New Pump</button>
-            </hbox>
+    <div align="center" apply="org.ddmed.pump.composer.PumpComposer">
+        <separator orient="horizontal" height="30px"></separator>
 
-        <vbox id="addPumpWindow" visible="false">
-           <!-- <window id="addPumpWindow" closable="true" title="New Pump" border="normal" visible="false">-->
-                <hbox hflex="1">
-                    <vbox>
-                        <label>Pump Name</label>
-                        <textbox id="txtNewPumpName" constraint="no empty"></textbox>
-                    </vbox>
-                    <vbox>
-                        <label>Pump Hostname</label>
-                        <textbox id="txtNewPumpHostname" constraint="no empty" ></textbox>
-                    </vbox>
-                    <vbox>
-                        <label>AETitle</label>
-                        <textbox id="txtNewAETitle" constraint="no empty"></textbox>
-                    </vbox>
-                    <vbox>
-                        <label>Pump HTTP Port</label>
-                        <textbox id="txtNewPumpHttpPort" constraint="no empty"></textbox>
-                    </vbox>
-
-
+        <div width="70%">
+            <vbox>
+                <hbox >
+                    <button id="btnAddPump">Add PUMP</button>
+                </hbox>
+                <hbox>
+                    <listbox id="listPumps" >
+                        <listhead>
+                            <listheader>NAME</listheader>
+                            <listheader>HOST</listheader>
+                            <listheader>AETitle</listheader>
+                            <listheader>DICOM PORT</listheader>
+                            <listheader>HTTP PORT</listheader>
+                            <listheader>DEFAULT</listheader>
+                        </listhead>
+                    </listbox>
                 </hbox>
                 <separator></separator>
-                <hbox hflex="1">
-                    <button id="btnSavePump">Save</button>
-                    <button id="btnVerify">Verify</button>
+                <hbox>
+                    <grid>
+                        <rows>
+                           <!--<row>
+                                <label  hflex="1">NAME</label>
+                                <label  hflex="1">HOST</label>
+                                <label  hflex="1">AETitle</label>
+                                <label  hflex="1">DICOM PORT</label>
+                                <label  hflex="1">HTTP PORT</label>
+                                <separator hflex="1" orient="vertical"></separator>
+                            </row>-->
+                            <row>
+                                <textbox id="txtEditPumpName" hflex="1"></textbox>
+                                <textbox id="txtEditPumpHostname" hflex="1"></textbox>
+                                <textbox id="txtEditPumpAETitle" hflex="1"></textbox>
+                                <textbox id="txtEditPumpDicomPort" hflex="1"></textbox>
+                                <textbox id="txtEditPumpHttpPort" hflex="1"></textbox>
+                                <separator hflex="1" orient="vertical"></separator>
+                            </row>
+                        </rows>
+                    </grid>
                 </hbox>
-                    <!--    </window>-->
-        </vbox>
-    </vbox>
+                <hbox>
+                    <button id="btnEdit" disabled="true">Edit</button>
+                    <button id="btnSave" visible="false">Save</button>
+                    <button id="btnVerify" disabled="true">Verify</button>
+                    <button id="btnMakeDefault" disabled="true">Make Default</button>
+                </hbox>
+            </vbox>
+        </div>
 
+        <window
+                id="windowCreatePump"
+                title="New Pump"
+                border="none"
+                visible="false"
+                width="400px"
+                >
+            <div align="center">
+            <grid>
+                <rows>
+                    <row>
+                        <label>NAME</label>
+                        <textbox id="txtNewPumpName"></textbox>
+                    </row>
+                    <row>
+                        <label>HOSTNAME</label>
+                        <textbox id="txtNewPumpHostname"></textbox>
+                    </row>
+                    <row>
+                        <label>AETitle</label>
+                        <textbox id="txtNewPumpAETitle"></textbox>
+                    </row>
+                    <row>
+                        <label>DICOM PORT</label>
+                        <textbox id="txtNewPumpDicomPort"></textbox>
+                    </row>
+                    <row>
+                        <label>HTTP PORT</label>
+                        <textbox id="txtNewPumpHttpPort"></textbox>
+                    </row>
+                </rows>
+            </grid>
+            <separator></separator>
+            <hbox>
+                <button id="btnSaveNewPump">Save</button>
+                <button id="btnVeriyNewPump">Verify</button>
+                <button id="btnCancelNewPump">Cancel</button>
+            </hbox>
+            </div>
+        </window>
+    </div>
 </zk>
+
