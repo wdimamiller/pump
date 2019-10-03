@@ -1,0 +1,61 @@
+<zk>
+    <div align="center" apply="org.ddmed.pump.composer.DeviceComposer">
+        <separator orient="horizontal" height="30px"></separator>
+
+        <div width="70%">
+            <vbox>
+                <hbox >
+                    <button id="btnAddDevice">Add AETitle</button>
+                </hbox>
+                <hbox>
+                    <listbox id="listDevices" >
+                        <listhead>
+                            <listheader>DEVICE NAME</listheader>
+                            <listheader>AETitle</listheader>
+                            <listheader>HOST</listheader>
+                            <listheader>DICOM PORT</listheader>
+                        </listhead>
+                    </listbox>
+                </hbox>
+                <separator></separator>
+            </vbox>
+        </div>
+
+        <window
+                id="windowCreateDevice"
+                title="New AETitle"
+                border="none"
+                visible="false"
+                width="400px"
+        >
+            <div align="center">
+                <grid>
+                    <rows>
+                        <row>
+                            <label>DEVICE NAME</label>
+                            <textbox id="txtNewDeviceName"></textbox>
+                        </row>
+                        <row>
+                            <label>AETitle</label>
+                            <textbox id="txtNewDeviceAETitle"></textbox>
+                        </row>
+                        <row>
+                            <label>HOSTNAME</label>
+                            <textbox id="txtNewDeviceHostname"></textbox>
+                        </row>
+                        <row>
+                            <label>DICOM PORT</label>
+                            <textbox id="txtNewDeviceDicomPort"></textbox>
+                        </row>
+                    </rows>
+                </grid>
+                <separator></separator>
+                <hbox>
+                    <button id="btnSaveNewDevice">Save</button>
+                    <button id="btnCancelNewDevice">Cancel</button>
+                </hbox>
+            </div>
+        </window>
+    </div>
+</zk>
+

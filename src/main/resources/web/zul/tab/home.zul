@@ -22,10 +22,6 @@
                                 <listhead>
                                     <listheader label="All facilities" />
                                 </listhead>
-
-                                <!--<listitem label="BOI"/>
-                                <listitem label="SUNSET"/>
-                                <listitem label="WOO"/>-->
                             </listbox>
                         </bandpopup>
                     </bandbox>
@@ -69,10 +65,6 @@
                                 <listhead>
                                     <listheader label="All modalities" />
                                 </listhead>
-                                <!--<listitem label="MR"/>
-                                <listitem label="CT"/>
-                                <listitem label="DX"/>
-                                <listitem label="SC"/>-->
                             </listbox>
                         </bandpopup>
                     </bandbox>
@@ -115,14 +107,55 @@
         <separator></separator>
         <separator></separator>
         <separator></separator>
+
+        <window
+                id="windowSendStudy"
+                title="Sending studies"
+                border="none"
+                visible="false"
+                width="400px"
+        >
+            <div align="center">
+
+                <separator></separator>
+                        <hbox>
+                            <label id="lblCountSelected"></label>
+                        </hbox>
+                <separator></separator>
+                        <hbox>
+                            <bandbox id="bandDevices">
+                                <bandpopup width="30em">
+                                    <listbox id="listDevices" >
+                                        <listhead>
+                                            <listheader>DEVICE NAME</listheader>
+                                            <listheader>AETitle</listheader>
+                                        </listhead>
+                                    </listbox>
+                                </bandpopup>
+                            </bandbox>
+                        </hbox>
+                <separator></separator>
+                        <hbox>
+                            <button id="btnSendStudies">Send</button>
+                            <button id="btnCloseWindow">Close</button>
+                        </hbox>
+                <separator></separator>
+
+            </div>
+        </window>
+
         <div id="listPatientContent" width="100%" align="center">
             <div id="gridP" width="90%"   >
 
                 <grid id="gridStudies"  mold="paging" pageSize="10" >
                     <auxhead>
-                        <auxheader id="auxHeader" colspan="8" label="Studies"></auxheader>
+                        <auxheader id="auxHeader" colspan="9" label="Studies"></auxheader>
+                        <auxheader id="headSend" align="center">
+                            <button id="btnOpenSendWindow">Send to</button>
+                        </auxheader>
                     </auxhead>
                     <columns>
+                        <column label="View" ></column>
                         <column label="Patient Name"  />
                         <column label="PatientDOB"  />
                         <column label="PatientID" />
@@ -131,6 +164,7 @@
                         <column label="Modality" align="center" />
                         <column label="Study Date" align="center"/>
                         <column label="Series" align="center" />
+                        <column label="" align="center" />
                     </columns>
                 </grid>
 

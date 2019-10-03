@@ -21,17 +21,21 @@ public class PumpService {
 
     public void createDefaultPump(){
 
-        Pump pump = new Pump();
-        pump.setName("LOCAL PUMP");
-        pump.setDicomAETitle("DCM4CHEE");
-        pump.setDicomHostname("127.0.0.1");
-        pump.setHttpPort("8080");
-        pump.setWebUri("dcm4chee-arc");
-        pump.setHttpProtocol("http");
-        pump.setUseByDefault(true);
-        pump.setDicomPort("11112");
+        Pump defPump = getDefault();
+        if (defPump == null) {
 
-        pumpRepository.save(pump);
+            Pump pump = new Pump();
+            pump.setName("LOCAL PUMP");
+            pump.setDicomAETitle("DCM4CHEE");
+            pump.setDicomHostname("127.0.0.1");
+            pump.setHttpPort("8080");
+            pump.setWebUri("dcm4chee-arc");
+            pump.setHttpProtocol("http");
+            pump.setUseByDefault(true);
+            pump.setDicomPort("11112");
+
+            pumpRepository.save(pump);
+        }
     }
 
     public List<Pump> getAll(){

@@ -32,21 +32,25 @@ public class UserService implements UserDetailsService {
     }
 
     public void createDefaultUser(){
-        Role role = new Role();
-        role.setName("ROLE_ADMIN");
+        User userAd = (User) loadUserByUsername("admin");
 
-        User user = new User();
-        user.setFirstName("Anthony");
-        user.setLastName("Bledin");
-        user.setUsername("admin");
-        user.setPassword("paris");
-        user.setAccountNonExpired(true);
-        user.setAccountNonLocked(true);
-        user.setCredentialsNonExpired(true);
-        user.setEnabled(true);
-        user.setRoles(ImmutableList.of(role));
+        if(userAd == null) {
+            Role role = new Role();
+            role.setName("ROLE_ADMIN");
 
-        userRepository.save(user);
+            User user = new User();
+            user.setFirstName("Anthony");
+            user.setLastName("Bledin");
+            user.setUsername("admin");
+            user.setPassword("paris");
+            user.setAccountNonExpired(true);
+            user.setAccountNonLocked(true);
+            user.setCredentialsNonExpired(true);
+            user.setEnabled(true);
+            user.setRoles(ImmutableList.of(role));
+
+            userRepository.save(user);
+        }
     }
 
 }
