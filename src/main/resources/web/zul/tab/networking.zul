@@ -1,0 +1,63 @@
+<zk>
+    <groupbox>
+
+        <hbox align="center" pack="center" hflex="1" vflex="1">
+            <vbox>
+                <bandbox id="bandStatuses" hflex="1">
+                    <bandpopup width="15em">
+                        <listbox id="listStatuses" checkmark="true" multiple="true" >
+                            <listhead>
+                                <listheader label="All Statuses"/>
+                            </listhead>
+                            <listitem label="TO SCHEDULE"/>
+                            <listitem label="SCHEDULED"/>
+                            <listitem label="IN PROCESS"/>
+                            <listitem label="COMPLETED"/>
+                            <listitem label="WARNING"/>
+                            <listitem label="FAILED"/>
+                            <listitem label="CANCELED"/>
+                        </listbox>
+                    </bandpopup>
+                </bandbox>
+            </vbox>
+
+            <separator orient="vertical"></separator>
+            <separator orient="vertical"></separator>
+            <separator orient="vertical"></separator>
+
+            <vbox>
+                <bandbox id="bandTypes" hflex="1">
+                    <bandpopup width="15em">
+                        <listbox id="listTypes" checkmark="true" multiple="true" >
+                            <listhead>
+                                <listheader label="All Types"/>
+                            </listhead>
+                            <listitem label="RETRIEVE"/>
+                            <listitem label="EXPORT"/>
+                        </listbox>
+                    </bandpopup>
+                </bandbox>
+            </vbox>
+
+            <separator orient="vertical"></separator>
+            <separator orient="vertical"></separator>
+            <separator orient="vertical"></separator>
+
+            <vbox>
+                <hbox align="start">
+                    <label value="Date"></label>
+                </hbox>
+                <hbox>
+                    <vbox align="start"  vflex="1">
+                        <hbox align="center" hflex="1" vflex="1"><label>Date From</label></hbox>
+                        <hbox align="center" hflex="1" vflex="1"><label>Date To  </label></hbox>
+                    </vbox>
+                    <vbox align="start"  vflex="1">
+                        <datebox id="dateFrom"/>
+                        <datebox id="dateTo" />
+                    </vbox>
+                </hbox>
+            </vbox>
+        </hbox>
+    </groupbox>
+</zk>

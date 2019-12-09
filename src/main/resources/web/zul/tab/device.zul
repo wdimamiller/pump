@@ -18,6 +18,25 @@
                     </listbox>
                 </hbox>
                 <separator></separator>
+                <hbox>
+                    <grid>
+                        <rows>
+                            <row>
+                                <textbox id="txtEditDeviceName" hflex="1"></textbox>
+                                <textbox id="txtEditDeviceHostname" hflex="1"></textbox>
+                                <textbox id="txtEditDeviceAETitle" hflex="1"></textbox>
+                                <textbox id="txtEditDeviceDicomPort" hflex="1"></textbox>
+                            </row>
+                        </rows>
+                    </grid>
+                </hbox>
+                <hbox>
+                    <button id="btnEdit" disabled="true">Edit</button>
+                    <button id="btnSave" visible="false">Save</button>
+                    <button id="btnVerify" disabled="true">Verify</button>
+                    <button id="btnDelete" disabled="true">Delete</button>
+                </hbox>
+                <separator></separator>
             </vbox>
         </div>
 

@@ -7,7 +7,7 @@
 
     <menupopup id="userMenu" >
         <menuitem label="Logout" href="/logout" />
-        <menuitem label="(v 1.0.0)"></menuitem>
+        <menuitem label="(v 1.0.7)"></menuitem>
     </menupopup>
 
     <separator></separator>
@@ -42,7 +42,9 @@
             <include mode="defer" src="/zkau/web/zul/tab/config.zul"></include>
         </tabpanel>
         <tabpanel>Users</tabpanel>
-        <tabpanel>Networking</tabpanel>
+        <tabpanel>
+            <include mode="defer" src="/zkau/web/zul/tab/networking.zul"></include>
+        </tabpanel>
         <tabpanel>Marketing</tabpanel>
         <tabpanel>Faxes</tabpanel>
         <tabpanel>Directory</tabpanel>

@@ -2,9 +2,6 @@ package org.ddmed.pump.model;
 
 import lombok.Data;
 
-
-import java.util.Date;
-
 @Data
 public class Study {
 
@@ -22,6 +19,8 @@ public class Study {
     private String procedure;
     private String patientID;
     private String referrerName;
+    private String bodyPart;
+    private String description;
 
 
 

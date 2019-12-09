@@ -1,15 +1,15 @@
 package org.ddmed.pump.composer;
 
-import org.ddmed.pump.configuration.PumpConfig;
+
 import org.ddmed.pump.domain.Pump;
 import org.ddmed.pump.service.PumpRestService;
 import org.ddmed.pump.service.PumpService;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Session;
-import org.zkoss.zk.ui.Sessions;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.select.SelectorComposer;
 import org.zkoss.zk.ui.select.annotation.Listen;
 import org.zkoss.zk.ui.select.annotation.VariableResolver;
@@ -17,6 +17,9 @@ import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.*;
+import org.zkoss.zul.Button;
+import org.zkoss.zul.Label;
+import org.zkoss.zul.Window;
 
 
 @VariableResolver(org.zkoss.zkplus.spring.DelegatingVariableResolver.class)
@@ -72,6 +75,7 @@ public class PumpComposer extends SelectorComposer {
 
     Pump selectedPump;
 
+    private ListModel<Pump> pumpListModel;
     @AfterCompose
     public void doAfterCompose (Component comp) throws Exception {
         super.doAfterCompose(comp);
@@ -80,7 +84,7 @@ public class PumpComposer extends SelectorComposer {
     }
 
     private void fillListPump(){
-        ListModel<Pump> pumpListModel = new ListModelArray<Pump>(pumpService.getAll());
+        pumpListModel = new ListModelArray<Pump>(pumpService.getAll());
         listPumps.setModel(pumpListModel);
         listPumps.setItemRenderer((listitem, data, index) -> {
             final Pump pump = (Pump) data;
@@ -113,6 +117,15 @@ public class PumpComposer extends SelectorComposer {
             }
             cellDefault.appendChild(new Label(strDefault));
             listitem.appendChild(cellDefault);
+
+            Listcell cellRedirect = new Listcell();
+            cellRedirect.setStyle("text-align:center");
+            Button btnGoToPumpWeb = new Button("");
+            btnGoToPumpWeb.setHref(pump.getRestBase() + "/ui2");
+            btnGoToPumpWeb.setTarget("_blank");
+            btnGoToPumpWeb.setIconSclass("z-icon-location-arrow");
+            cellRedirect.appendChild(btnGoToPumpWeb);
+            listitem.appendChild(cellRedirect);
 
         });
     }

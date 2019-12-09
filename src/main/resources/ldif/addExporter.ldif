@@ -1,0 +1,14 @@
+version: 1
+# The Exporter object, specifies the type and destination of the export,
+# which local AE shall perform the forward, and which JMS Queue shall be used to queue Export
+# Tasks ready to be performed, and optionally to defer the export to specified times
+dn: dcmExporterID=STORESCP,dicomDeviceName=dcm4chee-arc,cn=Devices,cn=DICOM Configuration,dc=dcm4che,dc=org
+objectClass: dcmExporter
+dcmExporterID: STORESCP
+dcmURI: dicom:STORESCP
+dicomAETitle: MY_AETITLE
+dcmQueueName: ExportQUEUE
+dicomDescription: Added with PUMP Web interface
+# defer export after business hours (between 6 pm and 6 am, or at any time on Saturday and Sunday)
+dcmSchedule: hour=0-23 dayOfWeek=*
+#dcmSchedule: hour=* dayOfWeek=0,6

@@ -10,6 +10,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.client.RestTemplate;
 import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.zk.ui.Component;
+
+
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.event.CheckEvent;
@@ -71,6 +73,8 @@ public class FilterComposer extends SelectorComposer {
     private Window windowSendStudy;
     @Wire
     private Button btnOpenSendWindow;
+    @Wire
+    private Button aBundleWeasis;
     @Wire("#windowSendStudy  #btnSendStudies")
     private Button btnSendStudies;
     @Wire("#windowSendStudy  #listDevices")
@@ -118,7 +122,22 @@ public class FilterComposer extends SelectorComposer {
         windowSendStudy.setVisible(true);
         windowSendStudy.setMode(Window.MODAL);
         fillListDevices();
+    }
 
+    @Listen("onClick=#aBundleWeasis")
+    public void downloadBundleWeasis(){
+
+        String weasisHref = selectedPump.getHttpProtocol() + "://" + selectedPump.getDicomHostname() + ":" + selectedPump.getHttpPort()
+                + "/weasis-pacs-connector/viewer";
+        if(selectedStudies.size() > 0){
+            weasisHref+="?studyUID=" + selectedStudies.get(0).getId();
+        }
+        for(int i = 1; i < selectedStudies.size(); i++){
+            weasisHref+= "&studyUID=" + selectedStudies.get(i).getId();
+        }
+        System.out.println(weasisHref);
+
+        Executions.getCurrent().sendRedirect(weasisHref, "_blank");
 
     }
 
@@ -164,18 +183,33 @@ public class FilterComposer extends SelectorComposer {
         if(index < 0){
             Clients.showNotification("Please, choose AETitle",
                     Clients.NOTIFICATION_TYPE_ERROR,
-                    btnSendStudies, "end_center", 100);
+                    btnSendStudies, "end_center", 1000);
             return;
         }
         Device selectedDevice = (Device) listDevices.getListModel().getElementAt(listDevices.getSelectedIndex());
         if (selectedDevice == null){
             Clients.showNotification("Please, choose AETitle",
                     Clients.NOTIFICATION_TYPE_ERROR,
-                    btnSendStudies, "end_center", 100);
+                    btnSendStudies, "end_center", 1000);
             return;
         }
 
-        PumpRestService.exportStudies(selectedPump, selectedStudies, selectedDevice);
+        if(!PumpRestService.verifyDevice(selectedPump, selectedDevice)){
+            Clients.showNotification("AEtitle is unreachable now. Can't send studies",
+                    Clients.NOTIFICATION_TYPE_ERROR,
+                    bandDevices, "end_center", 4000);
+            return;
+        }
+        int secCount = PumpRestService.exportStudies(selectedPump, selectedStudies, selectedDevice);
+
+        if(secCount == selectedStudies.size()){
+            Clients.showNotification("Successfully sent: " + secCount , Clients.NOTIFICATION_TYPE_INFO, btnOpenSendWindow, "before_center", 6000);
+        }
+        else{
+            Clients.showNotification("Fail to send: " + (selectedStudies.size() - secCount) , Clients.NOTIFICATION_TYPE_ERROR, btnOpenSendWindow, "before_center", 6000);
+        }
+
+        closeSendWindow();
 
     }
 
@@ -218,18 +252,53 @@ public class FilterComposer extends SelectorComposer {
 
             final Study study = (Study) data;
 
-            Button btnOviyam = new Button();
-            btnOviyam.setIconSclass("z-icon-search");
-            row.appendChild(btnOviyam);
+            Cell cellButtons = new Cell();
+            cellButtons.setAlign("center");
 
+
+            A aWeasis = new A();
+            aWeasis.setIconSclass("z-icon-eye");
+            aWeasis.setTarget("_blank");
+            String weasisHref = selectedPump.getHttpProtocol() + "://" + selectedPump.getDicomHostname() + ":" + selectedPump.getHttpPort() 
+                    + "/weasis-pacs-connector/viewer?studyUID=" + study.getId();
+            aWeasis.setHref(weasisHref);
+
+            A aOviyam = new A();
+            
+            aOviyam.setIconSclass("z-icon-eye");
+            aOviyam.setTarget("_blank");
+            String oviyamHref = selectedPump.getHttpProtocol() + "://" + selectedPump.getDicomHostname() + ":9095/viewer.html?studyUID=" + study.getId() + "&serverName=LOCAL";
+            aOviyam.setHref(oviyamHref);
+
+            A aDownloadZip = new A();
+            aDownloadZip.setIconSclass("z-icon-download");
+            aDownloadZip.setAttribute("download", study.getPatientName());
+            aDownloadZip.setHref(selectedPump.getRestBase() + "/aets/" + selectedPump.getDicomAETitle() + "/rs/studies/" +
+                    study.getId()+"?accept=application%2Fzip");
+
+
+            cellButtons.appendChild(aWeasis);
+            cellButtons.appendChild(new Separator("vertical"));
+            
+            cellButtons.appendChild(aOviyam);
+            cellButtons.appendChild(new Separator("vertical"));
+          
+            cellButtons.appendChild(aDownloadZip);
+
+
+
+            row.appendChild(cellButtons);
             row.appendChild(new Label(study.getPatientName()));
-            row.appendChild(new Label(study.getPatientDOB()));
+            row.appendChild(new Label(formatDate(study.getPatientDOB())));
             row.appendChild(new Label(study.getPatientID()));
             row.appendChild(new Label(study.getPatientGender()));
 
             row.appendChild(new Label(study.getInstitutionName()));
+            row.appendChild(new Label(study.getReferrerName()));
             row.appendChild(new Label(study.getModality()));
-            row.appendChild(new Label(study.getStudyDate()));
+            row.appendChild(new Label(study.getDescription()));
+            row.appendChild(new Label(study.getBodyPart()));
+            row.appendChild(new Label(formatDate( study.getStudyDate())));
             row.appendChild(new Label(String.valueOf(study.getCountSeries())));
             Checkbox checkboxSelect = new Checkbox();
             checkboxSelect.addEventListener("onCheck", new EventListener<Event>() {
@@ -252,6 +321,16 @@ public class FilterComposer extends SelectorComposer {
         });
 
 
+    }
+
+    public String formatDate(String date){
+        String result = null;
+
+        if(date!=null){
+            result = date.substring(4,6) + "/" + date.substring(6,8) + "/" + date.substring(0, 4);
+        }
+
+        return result;
     }
     @Listen("onClick=#btnSearch")
     public void clickBtnSearch(){

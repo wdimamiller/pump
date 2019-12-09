@@ -5,6 +5,7 @@ import org.ddmed.pump.domain.Pump;
 
 
 import org.ddmed.pump.model.Device;
+import org.ddmed.pump.model.Exporter;
 import org.ddmed.pump.model.Study;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
+import java.lang.reflect.Method;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +29,44 @@ public  class PumpRestService {
 
     private static RestTemplate restTemplate = new RestTemplate();
 
+    public static List<Exporter> getAllExporters(Pump pump, boolean hideAdditional){
+
+        List<Exporter> exporters = new ArrayList<Exporter>();
+
+        String URI = pump.getRestBase() + "/export";
+
+        String result = restTemplate.getForObject(URI, String.class);
+        if(result==null){
+            return exporters;
+        }
+        JSONArray arr = new JSONArray(result);
+
+        int count = arr.length();
+        for(int i = 0; i < count; i++) {
+            Exporter exporter = new Exporter();
+
+
+            String id = arr.getJSONObject(i).getString("id");
+            String description = null;
+            if(arr.getJSONObject(i).has("description")){
+                description = arr.getJSONObject(i).getString("description");
+            }
+
+
+
+            if(hideAdditional && ( id.equals("CalculateQueryAttributes")) || id.equals("CalculateStudySize")) {
+                continue;
+            }
+
+            exporter.setId(id);
+            exporter.setDescription(description);
+
+            exporters.add(exporter);
+
+        }
+
+        return exporters;
+    }
     public static List<Device> getAllDevices(Pump pump, boolean hideAdditional ){
         List<Device> devices = new ArrayList<Device>();
         String URI = pump.getRestBase() + "/aes";
@@ -70,6 +110,7 @@ public  class PumpRestService {
 
     public static int exportStudies(Pump pump, List<Study> studies, Device device){
 
+        int secCount = 0;
         for (Study study:studies) {
 
             String URI ="http://"
@@ -86,22 +127,22 @@ public  class PumpRestService {
             try {
                 ResponseEntity<String> answer = restTemplate.postForEntity(URI, entity, String.class);
                 System.out.println(answer);
-                return answer.getStatusCodeValue();
+                secCount = secCount + 1;
 
             } catch (HttpStatusCodeException e) {
                 System.out.println("HERE 500 1");
-                return 500;
+
             } catch (RuntimeException e) {
                 System.out.println("HERE 500 2");
-                return 500;
+
             }
 
         }
 
 
-    return 0;
+    return secCount;
     }
-    public static int addDevice(Pump pump, String deviceName, String deviceAETitle, String deviceHostname, String deviceDicomPort){
+    public static int addDevice(Pump pump, Device device){
 
         /*TODO
         *  Make it work with JSON
@@ -134,20 +175,20 @@ public  class PumpRestService {
         String jsonParameter = jsonDevice.toString();
         */
         String parameter = "{\n" +
-                "  \"dicomDeviceName\": \"" + deviceName + "\",\n" +
+                "  \"dicomDeviceName\": \"" + device.getName() + "\",\n" +
                 "  \"dicomVendorData\": false,\n" +
                 "  \"dicomInstalled\": true,\n" +
                 "  \"dicomNetworkConnection\": [\n" +
                 "    {\n" +
-                "      \"cn\": \"" + deviceName  + "NETWORK\",\n" +
-                "      \"dicomHostname\": \"192.168.2.2\",\n" +
-                "      \"dicomPort\": " + deviceDicomPort +  ",\n" +
+                "      \"cn\": \"" + device.getName()  + "NETWORK\",\n" +
+                "      \"dicomHostname\": \""+ device.getHostname()+"\",\n" +
+                "      \"dicomPort\": " + device.getDicomPort() +  ",\n" +
                 "      \"dcmNetworkConnection\": {}\n" +
                 "    }\n" +
                 "  ],\n" +
                 "  \"dicomNetworkAE\": [\n" +
                 "    {\n" +
-                "      \"dicomAETitle\": \"" + deviceAETitle + "\",\n" +
+                "      \"dicomAETitle\": \"" + device.getAETitle() + "\",\n" +
                 "      \"dicomDescription\": \"Added by PUMP Web Interface\",\n" +
                 "      \"dicomAssociationInitiator\": true,\n" +
                 "      \"dicomAssociationAcceptor\": true,\n" +
@@ -162,7 +203,7 @@ public  class PumpRestService {
                 "}";
 
 
-        String URI = pump.getRestBase() + "/devices/" + deviceName;
+        String URI = pump.getRestBase() + "/devices/" + device.getName();
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -181,6 +222,181 @@ public  class PumpRestService {
         }
 
     }
+
+
+    public static boolean reloadDevice(Pump pump){
+
+        String URI = pump.getRestBase() + "/ctrl/reload";
+
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.setRequestFactory(new SimpleClientHttpRequestFactory());
+        SimpleClientHttpRequestFactory rf = (SimpleClientHttpRequestFactory) restTemplate
+                .getRequestFactory();
+        rf.setReadTimeout(3000);
+        rf.setConnectTimeout(3000);
+
+
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> entity = new HttpEntity<>("" , headers);
+
+        try {
+            ResponseEntity<String> answer = restTemplate.postForEntity(URI, entity, String.class);
+            JSONObject jsonRespond = new JSONObject(answer.getBody());
+            String strCode = jsonRespond.getString("result");
+
+            if(strCode.equals("0")){
+                return true;
+            }
+            else{
+                return false;
+            }
+
+        } catch (HttpStatusCodeException e) {
+            return false;
+        } catch (RuntimeException e) {
+            return false;
+        }
+
+    }
+    public static boolean verifyDevice(Pump pump, Device device){
+
+        String URI = pump.getRestBase() +
+                "/aets/" + pump.getDicomAETitle() +
+                "/dimse/" + device.getAETitle() +
+                "?host=" + device.getHostname() +
+                "&port=" + device.getDicomPort();
+
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.setRequestFactory(new SimpleClientHttpRequestFactory());
+        SimpleClientHttpRequestFactory rf = (SimpleClientHttpRequestFactory) restTemplate
+                .getRequestFactory();
+        rf.setReadTimeout(3000);
+        rf.setConnectTimeout(3000);
+
+
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> entity = new HttpEntity<>("" , headers);
+
+        try {
+            ResponseEntity<String> answer = restTemplate.postForEntity(URI, entity, String.class);
+            JSONObject jsonRespond = new JSONObject(answer.getBody());
+            String strCode = jsonRespond.getString("result");
+
+            if(strCode.equals("0")){
+                return true;
+            }
+            else{
+                return false;
+            }
+
+        } catch (HttpStatusCodeException e) {
+            return false;
+        } catch (RuntimeException e) {
+            return false;
+        }
+
+    }
+    public static int deleteDevice(Pump pump, Device device){
+
+        String URI = pump.getRestBase() + "/devices/" + device.getName();
+
+
+
+        try {
+            restTemplate.delete(URI);
+            return 200;
+        } catch (HttpStatusCodeException e) {
+            return 204;
+        } catch (RuntimeException e) {
+            return 500;
+        }
+
+    }
+    public static int editDevice(Pump pump, Device device){
+
+        /*TODO
+         *  Make it work with JSON
+         */
+        /*
+        JSONObject jsonDevice = new JSONObject();
+        jsonDevice.put("dicomDeviceName", deviceName);
+        jsonDevice.put("dicomVendorData", false);
+        jsonDevice.put("dicomInstalled", true);
+        JSONObject dicomNetworkConnection = new JSONObject();
+        dicomNetworkConnection.put("cn", deviceName + "NETWORK");
+        dicomNetworkConnection.put("dicomHostname", deviceHostname);
+        dicomNetworkConnection.put("dicomPort",Integer.parseInt(deviceDicomPort));
+        dicomNetworkConnection.put("dcmNetworkConnection", new JSONObject());
+        JSONArray arrDicomNetworkConnection = new JSONArray();
+        arrDicomNetworkConnection.put(dicomNetworkConnection);
+        jsonDevice.put("dicomNetworkConnection", arrDicomNetworkConnection );
+        JSONObject dicomNetworkAE = new JSONObject();
+        dicomNetworkAE.put("dicomAETitle", deviceAETitle);
+        dicomNetworkAE.put("dicomDescription", "Added by PUMP Web Interface");
+        dicomNetworkAE.put("dicomAssociationInitiator",true);
+        dicomNetworkAE.put("dicomAssociationAcceptor", true);
+        JSONArray arrDicomNetworkConnectionReference = new JSONArray();
+        arrDicomNetworkConnectionReference.put("/dicomNetworkConnection/0");
+        dicomNetworkAE.put("dicomNetworkConnectionReference", arrDicomNetworkConnectionReference);
+        dicomNetworkAE.put("dicomTransferCapability", new JSONArray());
+        dicomNetworkAE.put("dcmNetworkAE", new JSONObject());
+        jsonDevice.put("dicomNetworkAE", dicomNetworkAE );
+        jsonDevice.put("dcmDevice", new JSONObject());
+        String jsonParameter = jsonDevice.toString();
+        */
+        String parameter = "{\n" +
+                "  \"dicomDeviceName\": \"" + device.getName() + "\",\n" +
+                "  \"dicomVendorData\": false,\n" +
+                "  \"dicomInstalled\": true,\n" +
+                "  \"dicomNetworkConnection\": [\n" +
+                "    {\n" +
+                "      \"cn\": \"" + device.getName()  + "NETWORK\",\n" +
+                "      \"dicomHostname\": \""+ device.getHostname()+"\",\n" +
+                "      \"dicomPort\": " + device.getDicomPort() +  ",\n" +
+                "      \"dcmNetworkConnection\": {}\n" +
+                "    }\n" +
+                "  ],\n" +
+                "  \"dicomNetworkAE\": [\n" +
+                "    {\n" +
+                "      \"dicomAETitle\": \"" + device.getAETitle() + "\",\n" +
+                "      \"dicomDescription\": \"Added by PUMP Web Interface\",\n" +
+                "      \"dicomAssociationInitiator\": true,\n" +
+                "      \"dicomAssociationAcceptor\": true,\n" +
+                "      \"dicomNetworkConnectionReference\": [\n" +
+                "        \"/dicomNetworkConnection/0\"\n" +
+                "      ],\n" +
+                "      \"dicomTransferCapability\": [],\n" +
+                "      \"dcmNetworkAE\": {}\n" +
+                "    }\n" +
+                "  ],\n" +
+                "  \"dcmDevice\": {}\n" +
+                "}";
+
+
+        String URI = pump.getRestBase() + "/devices/" + device.getName();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+
+        HttpEntity<String> entity = new HttpEntity<>(parameter , headers);
+
+        try {
+            ResponseEntity<String> answer = restTemplate.exchange(URI, HttpMethod.PUT, entity, String.class);
+            return answer.getStatusCodeValue();
+
+        } catch (HttpStatusCodeException e) {
+            return 500;
+        } catch (RuntimeException e) {
+            return 500;
+        }
+
+    }
+
     public static List<String> getModalities(Pump pump){
         List<String> modalities = new ArrayList<String>();
 
@@ -216,7 +432,7 @@ public  class PumpRestService {
                 "&PatientName=" + searchName + "*" +
                 "&ModalitiesInStudy=" + modalitiesInStudy +
                 "&PatientBirthDate=" + searchDOB;
-
+        System.out.println(uri);
         String result = restTemplate.getForObject(uri, String.class);
         if(result==null){
             return studies;
@@ -260,6 +476,7 @@ public  class PumpRestService {
                     .getJSONArray("Value").getString(0);
             study.setModality(modality);
 
+
             //PatientDOB
             String patientDOB = arr.getJSONObject(i)
                     .getJSONObject("00100030")
@@ -291,6 +508,7 @@ public  class PumpRestService {
                     "/aets/" + pump.getDicomAETitle() +
                     "/rs/studies/" + studyID + "/metadata";
             //System.out.println(uriStudy);
+            System.out.println(uriStudy);
             String resultMetadata = restTemplate.getForObject(uriStudy, String.class);
             int countSeries = 0;
             JSONArray series = new JSONArray(resultMetadata);
@@ -298,6 +516,25 @@ public  class PumpRestService {
             //System.out.println("SERIES: " + countSeries);
             for(int j = 0; j < countSeries; j++)
             {
+                //Study Description
+                if(series.getJSONObject(j).has("00081030")) {
+
+                    JSONObject descrObject  = series.getJSONObject(j).getJSONObject("00081030");
+                    if(descrObject.has("Value")){
+                        String description = descrObject.getJSONArray("Value").getString(0);
+                        study.setDescription(description);
+                    }
+
+                }
+                //BodyPart
+                if(series.getJSONObject(j).has("00180015")) {
+                    JSONObject bodyObject = series.getJSONObject(j).getJSONObject("00180015");
+                    if(bodyObject.has("Value")){
+                        String bodyPart = bodyObject.getJSONArray("Value").getString(0);
+                        study.setBodyPart(bodyPart);
+                    }
+                }
+                //Institution Name
                 if(series.getJSONObject(j).has("00080080")){
                     String institutionName = series.getJSONObject(j)
                             .getJSONObject("00080080")

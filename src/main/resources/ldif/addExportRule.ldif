@@ -1,0 +1,11 @@
+version: 1
+# Sample configuration for forwarding of received instances
+# The Export Rule specifies on which entity level the export shall be triggered, how long the export shall be
+# delayed after the receive of the last instance of the entity, and optionally additional conditions which
+# have to be matched by the instance to trigger the export
+dn: cn=Forward to STORESCP,dicomDeviceName=dcm4chee-arc,cn=Devices,cn=DICOM Configuration,dc=dcm4che,dc=org
+objectClass: dcmExportRule
+cn: Forward to STORESCP
+dcmEntity: Series
+dcmDuration: PT1M
+dcmExporterID: STORESCP

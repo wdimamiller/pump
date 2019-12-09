@@ -1,0 +1,59 @@
+<zk>
+    <div align="center" apply="org.ddmed.pump.composer.ExporterComposer">
+        <separator orient="horizontal" height="30px"></separator>
+
+        <div width="70%">
+            <vbox>
+                <hbox >
+                    <button id="btnAddExporter">Add Exporter</button>
+                </hbox>
+                <hbox>
+                    <listbox id="listExporters" >
+                        <listhead>
+                            <listheader>Exporter ID</listheader>
+                            <listheader>Description</listheader>
+                        </listhead>
+                    </listbox>
+                </hbox>
+            </vbox>
+        </div>
+
+        <window
+                id="windowCreateExporter"
+                title="New Exporter"
+                border="none"
+                visible="false"
+                width="400px"
+        >
+            <div align="center">
+                <grid>
+                    <rows>
+                        <row>
+                            <label>Exporter NAME</label>
+                            <textbox id="txtNewExporterID"></textbox>
+                        </row>
+                        <row>
+                            <label>Destination</label>
+                            <bandbox id="bandDevice">
+                                <bandpopup width="30em">
+                                    <listbox id="listDevice"></listbox>
+                                </bandpopup>
+                            </bandbox>
+                        </row>
+                        <row>
+                            <label>Description</label>
+                            <textbox id="txtNewDescription"></textbox>
+                        </row>
+
+                    </rows>
+                </grid>
+                <separator></separator>
+                <hbox>
+                    <button id="btnSaveNewExporter">Save</button>
+                    <button id="btnCancelNewExporter">Cancel</button>
+                </hbox>
+            </div>
+        </window>
+    </div>
+</zk>
+

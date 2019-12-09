@@ -16,6 +16,7 @@
                             <listheader>DICOM PORT</listheader>
                             <listheader>HTTP PORT</listheader>
                             <listheader>DEFAULT</listheader>
+                            <listheader></listheader>
                         </listhead>
                     </listbox>
                 </hbox>
@@ -23,14 +24,6 @@
                 <hbox>
                     <grid>
                         <rows>
-                           <!--<row>
-                                <label  hflex="1">NAME</label>
-                                <label  hflex="1">HOST</label>
-                                <label  hflex="1">AETitle</label>
-                                <label  hflex="1">DICOM PORT</label>
-                                <label  hflex="1">HTTP PORT</label>
-                                <separator hflex="1" orient="vertical"></separator>
-                            </row>-->
                             <row>
                                 <textbox id="txtEditPumpName" hflex="1"></textbox>
                                 <textbox id="txtEditPumpHostname" hflex="1"></textbox>

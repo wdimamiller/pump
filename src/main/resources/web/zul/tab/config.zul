@@ -4,16 +4,20 @@
             <tab id="tabPump" label="Pump" />
             <tab id="tabAETitle" label="AETitle" />
             <tab id="tabAppeariance" label="Appearance" />
+            <tab id="tabAutoroute" label="Autoroute" />
         </tabs>
         <tabpanels>
-            <tabpanel>
+            <tabpanel height="700px">
                 <include mode="defer" src="/zkau/web/zul/tab/pump.zul"></include>
             </tabpanel>
-            <tabpanel>
+            <tabpanel height="700px">
                 <include mode="defer" src="/zkau/web/zul/tab/device.zul"></include>
             </tabpanel>
-            <tabpanel>
+            <tabpanel height="700px">
                 <include mode="defer" src="/zkau/web/zul/tab/appearance.zul"></include>
+            </tabpanel>
+            <tabpanel height="700px">
+                <include mode="defer" src="/zkau/web/zul/tab/exporter.zul"></include>
             </tabpanel>
         </tabpanels>
     </tabbox>

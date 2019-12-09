@@ -102,8 +102,6 @@
 
         </groupbox>
 
-
-
         <separator></separator>
         <separator></separator>
         <separator></separator>
@@ -145,26 +143,33 @@
         </window>
 
         <div id="listPatientContent" width="100%" align="center">
-            <div id="gridP" width="90%"   >
-
-                <grid id="gridStudies"  mold="paging" pageSize="10" >
+            <div id="gridP" width="98%"   >
+                <toolbar align="end" apply="">
+                    <hbox align="center" hflex="1" vflex="1">
+                        <button id="aBundleWeasis" iconSclass="z-icon-eye" tooltiptext="Open Weasis with selected studies"></button>
+                        <separator orient="vertical"></separator>
+                        <button id="btnOpenSendWindow" iconSclass="z-icon-mail-forward" tooltiptext="Send selected studies"></button>
+                        <separator orient="vertical"></separator>
+                    </hbox>
+                </toolbar>
+                <grid id="gridStudies"  mold="paging" pageSize="25" >
                     <auxhead>
-                        <auxheader id="auxHeader" colspan="9" label="Studies"></auxheader>
-                        <auxheader id="headSend" align="center">
-                            <button id="btnOpenSendWindow">Send to</button>
-                        </auxheader>
+                        <auxheader id="auxHeader" colspan="13" label="Studies"></auxheader>
                     </auxhead>
                     <columns>
-                        <column label="View" ></column>
-                        <column label="Patient Name"  />
-                        <column label="PatientDOB"  />
-                        <column label="PatientID" />
-                        <column label="Gender" align="center" />
-                        <column label="Institution Name" align="center" />
-                        <column label="Modality" align="center" />
-                        <column label="Study Date" align="center"/>
-                        <column label="Series" align="center" />
-                        <column label="" align="center" />
+                        <column width="5%"></column>
+                        <column label="Patient Name"  align="left"/>
+                        <column label="Birth Date"  width="6%" align="center"/>
+                        <column label="PatientID" align="center" width="7%"/>
+                        <column label="Gender" align="center" width="3%"/>
+                        <column label="Institution Name" align="left" />
+                        <column label="Referring Physician" align="left" />
+                        <column label="Modality" align="center" width="4%"/>
+                        <column label="Study Description" align="left" width="10%"/>
+                        <column label="Body Part" align="left" width="10%"></column>
+                        <column label="Study Date" align="center" width="6%"/>
+                        <column label="Series" align="right" width="3%"/>
+                        <column label="" align="center" width="3%"><checkbox id="checkSelectAll"></checkbox> </column>
                     </columns>
                 </grid>
 
