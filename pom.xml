@@ -18,7 +18,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
-        <zk.version>8.6.0.1</zk.version>
+        <zk.version>9.6.0.2</zk.version>
         <commons-io>2.4</commons-io>
     </properties>
 
